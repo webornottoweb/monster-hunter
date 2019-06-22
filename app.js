@@ -7,8 +7,10 @@ new Vue({
     },
     methods: {
         handleAttack: function() {
-            this.playerHealth -= Math.floor(Math.random() * 100);
-            this.monsterHealth -= Math.floor(Math.random() * 100);
+            var playerDamage = Math.floor(Math.random() * 100); // damage dealt TO player
+            var monsterDamage = Math.floor(Math.random() * 100); // damage dealt TO monster
+            this.playerHealth = playerDamage <= this.playerHealth ? this.playerHealth - playerDamage: 0;
+            this.monsterHealth = monsterDamage <= this.monsterHealth ? this.monsterHealth - monsterDamage : 0;
 
             this.checkResult();
         },
@@ -21,41 +23,27 @@ new Vue({
             this.gameIsRunning = true;
         },
         checkResult: function() {
-            debugger;
             if (this.playerWin) {
+                this.gameIsRunning = false;
                 alert('You won');
             } else if (this.monsterWin) {
+                this.gameIsRunning = false;
                 alert('You lose');
             } else if (this.draw) {
+                this.gameIsRunning = false;
                 alert('Draw');
             }
         }
     },
     computed: {
         playerWin: function() {
-            debugger;
-            return this.playerHealth == 0 && this.monsterHealth > 0;
+            return this.monsterHealth == 0 && this.playerHealth > 0;
         },
         monsterWin: function() {
-            return this.monsterHealth == 0 && this.playerHealth > 0;
+            return this.playerHealth == 0 && this.monsterHealth > 0;
         },
         draw: function() {
             return this.playerHealth == 0 && this.monsterHealth == 0;
         }
-    },
-    watch: {
-        playerHealth: function() {
-            debugger;
-            if (this.playerHealth <= 0) {
-                this.playerHealth = 0;
-                this.gameIsRunning = false;
-            }
-        },
-        monsterHealth: function() {
-            if (this.monsterHealth <= 0) {
-                this.monsterHealth = 0;
-                this.gameIsRunning = false;
-            }
-        }
-    },
+    }
 });
