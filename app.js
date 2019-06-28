@@ -7,12 +7,21 @@ new Vue({
     },
     methods: {
         handleAttack: function() {
-            var playerDamage = Math.floor(Math.random() * 100); // damage dealt TO player
-            var monsterDamage = Math.floor(Math.random() * 100); // damage dealt TO monster
-            this.playerHealth = playerDamage <= this.playerHealth ? this.playerHealth - playerDamage: 0;
-            this.monsterHealth = monsterDamage <= this.monsterHealth ? this.monsterHealth - monsterDamage : 0;
+            var playerDamage = this.getDamage(); // damage dealt TO player
+            var monsterDamage = this.getDamage(); // damage dealt TO monster
+            this.playerHealth = this.updateHealth(playerDamage, this.playerHealth);
+            this.monsterHealth = this.updateHealth(monsterDamage, this.monsterHealth);
 
             this.checkResult();
+        },
+        handleSpecialAttack: function() {
+            
+        },
+        handleHeal: function() {
+
+        },
+        handleGiveUp: function() {
+
         },
         handleStart: function() {
             this.reset();
@@ -33,6 +42,12 @@ new Vue({
                 this.gameIsRunning = false;
                 alert('Draw');
             }
+        },
+        getDamage: function() {
+            return Math.floor(Math.random() * 100);
+        },
+        updateHealth: function(damage, health) {
+            return damage <= health ? health - damage: 0;
         }
     },
     computed: {
